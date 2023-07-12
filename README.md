@@ -1,7 +1,8 @@
 # FE-React
 React - 리액트를 다루는 기술
 
-<img src="https://bangdori.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F8518369a-9e17-43ae-b102-b1d7cde394e0%2FUntitled.png?id=97b7447d-ba50-4ddc-91b4-e7dec34a6d0c&table=block&spaceId=00806414-a331-4fe5-9349-7a5c15857f83&width=1590&userId=&cache=v2"/>
+<img src="https://bangdori.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F8518369a-9e17-43ae-b102-b1d7cde394e0%2FUntitled.png?id=97b7447d-ba50-4ddc-91b4-e7dec34a6d0c&table=block&spaceId=00806414-a331-4fe5-9349-7a5c15857f83&width=1590&userId=&cache=v2" width="244px"/>
+
 책을 읽고 내용을 정리하는 레포지토리입니다.
 
 ## 목차
