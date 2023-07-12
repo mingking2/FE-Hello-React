@@ -144,16 +144,249 @@ React - 리액트를 다루는 기술
 ## 2장 JSX
 
 ### 2.1 코드 이해하기
-
+```jsx
+import logo from "./logo.svg";
+import "./App.css";
+```
+- import 구문은 특정 파일을 불러오는 것을 의미한다. 리액트로 만든 프로젝트의 자바스크립트 파일에서는 import를 사용하여 다른 파일들을 불러와 사용할 수 있다.
+- 모듈을 불러와서 사용하는 것은 사실 원래 브라우저에는 없던 기능이다. 브라우저가 아닌 환경에서 자바스크립트를 실행할 수 있게 해 주는 환경인 Node.js에서 지원하는 기능이다.
+- 참고로 Node.js에서는 import가 아닌 require라는 구문으로 패키지를 불러올 수 있다.
+- 이러한 기능을 브라우저에서도 사용하기 위해 번들러를 사용한다.
+<br><br>
+- 대표적인 번들러로 웹팩, Parcel, browserify라는 도구들이 있다. 리액트 프로젝트에서는 주로 웹팩을 사용한다. 펀의성과 확장성이 다른 도구보다 뛰어나기 때문이다.
+<br><br>
+- 웹팩을 사용하면 SVG 파일과 CSS 파일도 불러와서 사용할 수 있다. 이렇게 파일들을 불러오는 것은 웹팩의 로더라는 기능이 담당한다.
+    - css-loader: CSS 파일을 불러올 수 있게 한다.
+    - file-loader: 자바스크립트 파일들을 불러오면서 최신 자바스크립트 문법으로 작성된 코드를 바벨이라는 도구를 사용하여 ES5 문법으로 변환해준다.
+- 웹팩의 로더는 원래 직접 설치하고 설정해야 하지만 리액트 프로젝트를 만들 때 사용했던 create-react-app이 번거로운 작업을 모두 대신해 주기 때문에 별도의 설정이 필요없다.
+<br><br>
 ### 2.2 JSX란?
+- JSX는 자바스크립트의 확장 문법이며 XML과 매우 비슷하게 생겼다. 이런 형식으로 작성한 코드는 브라우저에서 실행되기 전에 코드가 번들링되는 과정에서 바벨을 사용하여 일반 자바스크립트 형태의 코드로 변환된다.
+```JSX
+function App() {
+    return (
+        <div>
+            Hello <b>react</b>
+        </div>
+    );
+}
+```
+```jsx
+function App() {
+    return React.createElement("div", null, "Hello ", React.createElement("b", null, "react));
+}
+```
+- 만약 컴포넌트를 렌더링할 때마다 JSX 코드를 작성하는 것이 아니라 위 코드처럼 매번 React.createElement 함수를 사용해야 한다면 매우 불편하다. 
+- JSX를 사용하면 매우 편하게 UI를 렌더링할 수 있다.
+<br><br>
 
 ### 2.3 JSX의 장점
+1. 보기 쉽고 익숙하다
+    - JSX를 사용하는 편이 더 가독성이 높고 작성하기 쉽다.
+2. 더욱 높은 활용도
+    - JSX에서는 우리가 알고 있는 div나 span 같은 HTML 태그를 사용할 수 있을 뿐만 아니라, 앞으로 만들 컴포넌트도 JSX 안에서 작성할 수 있다.
+<br><br>
 
 ### 2.4 JSX 문법
+1. 감싸인 요소
+    - 컴포넌트에 여러 요소가 있다면 반드시 부모 요소 하나로 감싸야 한다.
+        - Virtual DOM에서 컴포넌트 변화를 감지해 낼 때 효율적으로 비교할 수 있도록 컴포넌트 내부는 하나의 DOM 트리 구조로 이루어져야 한다는 규칙이 있기 때문이다.
+    ```jsx
+    function App() {
+        return (
+            <div>
+                <h1>리액트 안녕!</h1>
+                <h2>잘 작동하니?</h2>
+            </div>
+        )
+    }
+
+    export default App;
+    ```
+    ```jsx
+    import { Fragment } from 'react';
+
+    function App() {
+        return (
+            <Fragment>
+                <h1>리액트 안녕!</h1>
+                <h2>잘 작동하니?</h2>
+            </Fragment>
+        )
+    }
+
+    export default App;
+    ```
+    ```jsx
+    function App() {
+        return (
+            <>
+                <h1>리액트 안녕!</h1>
+                <h2>잘 작동하니?</h2>
+            </>
+        )
+    }
+
+    export default App;
+    ```
+<br><br>
+2. 자바스크립트 표현
+- JSX 안에서는 자바스크립트 표현식을 쓸 수 있다.
+- 자바스크립트 표현식을 작성하려면 JSX 내부에서 코드를 { }로 감싸면 된다.
+    ```jsx
+    function App() {
+        const name = '리액트';
+        return (
+            <>
+                <h1>{name} 안녕!</h1>
+                <h2>잘 작동하니?</h2>
+            </>
+        )
+    }
+
+    export default App;
+    ```
+<br><br>
+3. IF 문 대신 조건부 연산자
+- JSX 내부의 자바스크립트 표현식에서 if 문을 사용할 수 없다.
+- 하지만 조건에 따라 다른 내용을 렌더링해야 할 때는 JSX 밖에서 if 문을 사용하여 사전에 값을 설정하거나, { } 안에 조건부 연산자를 사용하면 된다.
+- 조건부 연산자의 또 다른 이름은 삼항 연산자이다.
+    ```jsx
+    function App() {
+        const name = '리액트';
+        return (
+            <div>
+                {name === '리액트' ? (
+                    <h1>리액트입니다.</h1>
+                ) : (
+                    <h2>리액트가 아닙니다.</h2>    
+                )}
+            </div>
+        );
+    }
+
+    export default App;
+    ```
+<br><br>
+4. AND 연산자(&&)를 사용한 조건부 렌더링
+```jsx
+function App() {
+    const name = '뤼액트';
+    return <div>{name === '리액트' && <h1>리액트입니다.</h1>}</div>;
+}
+
+export default App;
+```
+<br><br>
+5. undefined를 렌더링하지 않기
+- 리액트 컴포넌트에서는 함수에서 undefined만 반환하여 렌더링하는 상황을 만들면 안 된다.
+    - 어떤 값이 undefined일 수도 있다면, OR(||) 연산자를 사용하면 해당 값이 undefined일 때 사용할 값을 지정할 수 있으므로 간단하게 오류를 방지할 수 있다.
+    ```jsx
+    import './App.css';
+
+    function App() {
+        const name = undefined;
+        return name || '값이 undefined입니다.';
+    }
+
+    export default App;
+    ```
+    <br><br>
+    - 반면 JSX 내부에서 undefined를 렌더링하는 것은 괜찮다.    
+    ```jsx
+    import './App.css';
+
+    function App() {
+        const name = undefined;
+        return <div>name</div>;
+    }
+
+    export default App;
+    ```
+<br><br>
+6. 인라인 스타일링
+- 리액트에서 DOM 요소에 스타일을 적용할 때는 문자열 형태로 넣는 것이 아니라 객체 형태로 넣어 주어야 한다.
+- 카멜 표기법으로 작성해야 한다.
+```jsx
+function App() {
+    const name = '리액트';
+    const style = {
+        backgroundColor: 'black',
+        color: 'aqua',
+        fontSize: '48px',
+        fontWeight: 'bold',
+        padding: 16
+    };
+    return <div style={style}>{name}</div>;
+}
+
+export default App;
+```
+- 지금은 style 객체를 미리 선언하고 div의 style 값으로 지정해 주었는데 미리 선언하지 않고 바로 style 값을 지정할 수도 있다.
+```jsx
+function App() {
+    const name = '리액트';
+
+    return (
+        <div 
+            style={{
+                backgroundColor: 'black',
+                color: 'aqua',
+                fontSize: '48px',
+                fontWeight: 'bold',
+                padding: 16
+            }}
+        >
+            {name}
+        </div>
+    );
+}
+
+export default App;
+```
+<br><br>
+7. class 대신 className
+- 일반 HTML에서 CSS 클래스를 사용할 때는 `<div class="myclass"></div>`와 같이 class라는 속성을 설정한다. 하지만 JSX에서는 class가 아닌 className으로 설정해 주어야 한다.
+```css
+.react {
+    background: 'aqua',
+    color: 'black',
+    fontSize: '48px',
+    fontWeight: 'bold',
+    padding: 16px
+}
+```
+
+```jsx
+import './App.css';
+
+function App() {
+    const name = '리액트';
+    return <div className="react">{name}</div>;
+}
+
+export default App;
+```
+
+<br><br>
+8. 꼭 닫아야 하는 태그
+- `<input></input>`
+- `<input />`
+    - 태그 사이에 별도의 내용이 들어가지 않는 경우 self-closing 태그라고 부른다.
+    - 선언하면서 동시에 닫을 수 있는 태그이다.
+
+<br><br>
+9. 주석
+- {/* ... */}
+<br><br>
 
 ### 2.5 ESLint와 Prettier 적용하기
+- 기타 설정
+<br><br>
 
 ### 2.6 정리
+- JSX는 HTML과 비슷하지만 완전히 똑같지는 않다. 코드로 보면 XML 형식이지만 실제로는 자바스크립트 객체이며, 용도도 다르고 문법도 조금씩 차이가 난다.
+<br><br>
 
 ## 3장 컴포넌트
 
