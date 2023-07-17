@@ -1,19 +1,16 @@
-import './App.css';
+//import MyComponent from './MyComponent';
+import React from "react";
+import Timer from "./Timer.js";
+import Counter from "./Counter.js";
 
-function App() {
-  const name = '리액트';
+const App = () => {
   return (
-    <>
-      {/* 주석은 이렇게 작성한다. */}
-      <div
-        className="react" // 시작 태그를 여러 주로 작성하게 된다면 여기에 주석을 작성할 수 있다.
-      >
-        {name}
-      </div>
-      // 하지만 이런 주석이나 /* 이런 주석은 페이지에 그대로 나타나게 된다 */
-      <input />
-    </>
+    <div className="App">
+      <h1>Timer App</h1>
+      <Timer />
+      <Counter />
+    </div>
   );
-}
+};
 
 export default App;
