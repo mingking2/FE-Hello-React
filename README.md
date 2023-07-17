@@ -1,6 +1,8 @@
 # FE-React
 React - 리액트를 다루는 기술
 
+- npm start
+
 <img src="https://bangdori.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F8518369a-9e17-43ae-b102-b1d7cde394e0%2FUntitled.png?id=97b7447d-ba50-4ddc-91b4-e7dec34a6d0c&table=block&spaceId=00806414-a331-4fe5-9349-7a5c15857f83&width=1590&userId=&cache=v2" width="244px"/>
 
 책을 읽고 내용을 정리하는 레포지토리입니다.
@@ -391,12 +393,394 @@ export default App;
 ## 3장 컴포넌트
 
 ### 3.1 클래스형 컴포넌트
+- 컴포넌트를 선언하는 방식은 두 가지이다.
+    - 함수 컴포넌트
+        ```js
+        import './App.css';
+        
+        function App() {
+            const name = '리액트';
+            return return <div className="react">{name}</div>;
+        }
+
+        export default App;
+        ```
+    - 클래스형 컴포넌트
+        ```js
+        import { Component } from 'react';
+
+        class App extends Component {
+            render() {
+                const name = 'react';
+                return <div className="react">{name}</div>;
+            }
+        }
+
+        export default App;
+        ```
+- 클래스형 컴포넌트와 함수 컨포넌트의 차이점
+    - 클래스형 컴포넌트
+        - state 기능 및 라이프 사이클 기능을 사용할 수 있다.
+        - 임의 메서드를 정의할 수 있다.
+        - render 함수가 꼭 있어야 하고, 그 안에서 보여 주어야 할 JSX를 반환해야 한다.
+    - 함수형 컴포넌트
+        - 클래스형 컴포넌트보다 선언하기 훨씬 편하다.
+        - 메모리 자원도 클래스형 컴포넌트보다 덜 사용한다.
+        - 프로젝트를 완성하여 빌드한 후 배포할 때도 함수 컴포넌트를 사용하는 것이 결과물의 파일 크기가 더 작다.(중요하지 않음)
+        - state와 라이프사이클 API의 사용이 불가능하다
+            - Hooks라는 기능 도입되면서 해결
+
+- 그래서 뭘 써야하나?
+    - 초반부에서는 기능을 구현할 때 클래스형 컴포넌트 위주로 사용하여 리액트의 기본기를 익힌다.
+    - 후반부에서는 Hooks를 완벽히 이해한 후 함수 컴포넌트와 Hooks를 기반으로 컴포넌트를 작성한다.
+<br><br>
 
 ### 3.2 첫 컴포넌트 생성
+- src 디렉토리에 MyComponent.js 파일 생성
+- 코드 작성하기
+- 모듈 내보내기 및 불러오기
+    - 모듈 내보내기(export)
+    - 모듈 불러오기(import)
 
 ### 3.3 props
+props는 properties를 줄인 표현으로 컴포넌트 속성을 설정할 때 사용하는 요소이다. 
+- JSX 내부에서 props 렌더링
+    - props 값은 컴포넌트 함수의 피라미터로 받아 와서 사용할 수 있다.
+    ```js
+    const MyComponent = props => {
+        return <div>안녕하세요, 제 이름은 {props.name}입니다.</div>;
+    };
 
+    export default MyComponent;
+    ```
+    <br><br>
+- 컴포넌트를 사용할 때 props 값 지정하기
+    ```js
+    import MyComponent from './MyComponent';
+
+    const App = () => {
+        return <MyComponent name="React" />;
+    };
+
+    export default App;
+    ```
+    <br><br>
+- props 기본값 설정: defaultProps
+    ```js
+    const MyComponent = props => {
+        return <div>안녕하세요, 제 이름은 {props.name}입니다.</div>;
+    };
+
+    MyComponent.defaultProps = {
+        name: '기본 이름'
+    };
+
+    export default MyComponent;
+    ```
+    <br><br>
+- 태그 사이의 내용을 보여 주는 children
+    ```js
+    import MyComponent from './MyComponent';
+
+    const App = () => {
+        return <MyComponent>리액트</MyComponent>;
+    };
+
+    export default App;
+    ```
+
+    ```js
+    const MyComponent = props => {
+        return (
+            <div>
+                안녕하세요, 제 이름은 {props.name}입니다. <br />
+                children 값은 {props.children}
+                입니다.
+            </div>
+        );
+    };
+
+    MyComponent.defaultProps = {
+        name: '기본 이름'
+    };
+
+    export default MyComponent;
+    ```
+    <br><br>
+- 비구조화 할당 문법을 통해 props 내부 값을 추출하기
+    ```js
+    const MyComponent = props => {
+        const { name, children } = props;
+        return (
+            <div>
+                안녕하세요, 제 이름은 {name}입니다. <br />
+                children 값은 {children}
+                입니다.
+            </div>
+        );  
+    };
+
+    MyComponent.defaultProps = {
+        name: '기본 이름'
+    };
+
+    export default MyComponent;
+    ```
+    - 객체에서 값을 추출하는 문법을 비구조화 할당이라고 한다.
+    <br><br>
+    ```js
+    const MyComponent = ({ name, children }) => {
+        return (
+            <div>
+                안녕하세요, 제 이름은 {name}입니다. <br />
+                children 값은 {children}
+                입니다.
+            </div>
+        );  
+    };
+
+    MyComponent.defaultProps = {
+        name: '기본 이름'
+    };
+
+    export default MyComponent;
+    ```
+    - 앞으로 함수 컴포넌트에서 props를 사용할 때 이렇게 파라미터 부분에서 비구조화 할당 문법을 사용한다.
+<br><br>
+- propTypes를 통한 props 검증
+    - 컴포넌트의 필수 props를 지정하거나 props의 타입을 지정할 때는 propTypes를 사용한다.
+    ```js
+    import PropTypes from 'prop-types';
+
+    const MyComponent = ({ name, children }) => {
+        return (....);
+    };
+
+    MyComponent.defaultProps = {
+        name: '기본 이름'
+    };
+    
+    MyComponent.propTypes = {
+        name: ProTypes.string
+    };
+
+    export default MyComponent;
+    ```
+
+    ```js
+    import MyComponent from './MyComponent';
+
+    const App = () => {
+        return <MyComponent name="React">리액트</MyComponent>;
+    };
+
+    export default App;
+    ```
+    
+    - isRequired를 사용하여 필수 propTypes 설정
+
+    ```js
+    import PropTypes from 'prop-types';
+
+    const MyComponent = ({ name, favoriteNumber, children }) => {
+        return (
+            <div>
+                안녕하세요, 제 이름은 {name}입니다. <br />
+                children 값은 {children}
+                입니다.
+                <br />
+                제가 좋아하는 숫자는 {favoriteNumber}입니다.
+            </div>
+        );
+    };
+
+    MyComponent.defaultProps = {
+        name: '기본 이름'
+    };
+    
+    MyComponent.propTypes = {
+    name: PropTypes.string,
+    favoriteNumber: PropTypes.number.isRequired
+    };
+
+    export default MyComponent;
+    ```
+ 
+    ```js
+    import MyComponent from './MyComponent';
+
+    const App = () => {
+        return (
+            <MyComponent name="React" favoriteNumber={1}>
+            리액트
+            </MyComponent>
+        );
+    };
+
+    export default App;
+    ```
+- 더 많은 PropTypes 종류
+    - array: 배열
+    - arrayOf(다른 PropType): 특정 PropType으로 이루어진 배열
+    - bool
+    - func: 함수
+    - number
+    - object
+    - string
+    - symbol: ES6의 Symbol
+    - node: 렌더링할 수 있는 모든 것
+    - instanceOf: 특정 클래스의 인스턴스
+    - oneOf(['dog', 'cat']): 주어진 배열 요소 중 값 하나
+    - oneOfType([React.PropTypes.string, PropTypes.number]): 주어진 배열 안의 종류 중 하나
+    - objectOf(React.PropTypes.number): 객체의 모든 키 값이 인자로 주어진 PropType인 객체
+    - shape({ name: PropTypes.string, num: PropTypes.number }): 주어진 스키마를 가진 객체
+    - any: 아무 종류
+<br /><br />
+- 클래스형 컴포넌트에서 props 사용하기
+    - 클래스형 컴포넌트에서 props를 사용할 때는 render 함수에서 this.props를 조회하면 된다.
+    ```js
+    import { Component } from 'react';
+    import PropTypes from 'prop-types';
+
+    class MyComponent extends Component {
+        render() {
+            const { name, favoriteNumber, children } = this.props; // 비구조화 할당
+            return (
+                <div>
+                    안녕하세요, 제 이름은 {name}입니다. <br />
+                    children 값은 {children}
+                    입니다.
+                    <br />
+                    제가 좋아하는 숫자는 {favoriteNumber}입니다.
+                </div>
+            );
+        }
+    }
+
+    MyComponent.defaultProps = {
+    name: '기본 이름'
+    };
+
+    MyComponent.propTypes = {
+        name: PropTypes.string,
+        favoriteNumber: PropTypes.number.isRequired
+    };
+
+    export default MyComponent;
+    ```
+    - 클래스형 컴포넌트에서 defaultProps와 propTypes를 설정할 때 class 내부에서 지정하는 방법도 있다.
+     ```js
+    import { Component } from 'react';
+    import PropTypes from 'prop-types';
+
+    class MyComponent extends Component {
+        static defaultProps = {
+            name: '기본 이름'
+        };
+
+        static propTypes = {
+            name: PropTypes.string,
+            favoriteNumber: PropTypes.number.isRequired
+        };
+
+        render() {
+            const { name, favoriteNumber, children } = this.props; // 비구조화 할당
+            return (
+                <div>
+                    안녕하세요, 제 이름은 {name}입니다. <br />
+                    children 값은 {children}
+                    입니다.
+                    <br />
+                    제가 좋아하는 숫자는 {favoriteNumber}입니다.
+                </div>
+            );
+        }
+    }
+
+    export default MyComponent;
+    ```
+    <br />
 ### 3.4 state
+- props는 컴포넌트가 사용되는 과정에서 부모 컴포넌트가 설정하는 값이며, 컴포넌트 자신은 해당 props를 읽기 전용으로만 사용할 수 있다.
+    - props를 바꾸려면 부모 컴포넌트에서 바꿔야 한다.
+<br /><br />
+- 리액트에서 state는 컴포넌트 내부에서 바뀔 수 있는 값을 의미한다.
+    - 클래스형 컴포넌트가 지니고 있는 state
+    - 함수 컴포넌트에서 useState라는 함수를 통해 사용하는 state
+    <br /><br />
+
+- 클래스형 컴포넌트의 state
+    ```js
+    import { Component } from "react";
+
+    class Counter extends Component {
+        constructor(props) {
+            super(props);
+            // state의 초깃값 설정하기
+            this.state = {
+                number: 0
+                fixedNumber: 0 // state 객체 안에 여러 값을 넣을 수 있다.
+            };
+        }
+        render() {
+            const { number, fixedNumber } = this.state; // state를 조회할 때는 this.state로 조회한다.
+            return (
+                <div>
+                    <h1>{number}</h1>
+                    <h2>변하지 않는 값: {fixedNumber}</h2>
+                    <button
+                        // onClick을 통해 버튼이 클릭되었을 때 호출할 함수를 지정한다.
+                        onClick={() => {
+                            // this.setState를 사용하여 state에 새로운 값을 넣을 수 있다.
+                            this.setState({ number: number + 1});
+                    }}
+                    >
+                        +1
+                    </button>
+                </div>
+            );
+        }
+    }
+
+    export default Counter;
+    ```
+    - state를 construcotr에서 꺼내기
+        ```js
+        state = {
+            number: 0,
+            fixedNumber: 0
+        };
+        ```
+        - 이렇게 하면 constructor 메서드를 선언하지 않고도 state 초깃값을 설정할 수 있다.
+        - 앞으로 state를 사용할 때 이 방식을 사용하여 state의 초깃값을 설정한다.
+           <br /><br />
+    - this.setState에 객체 대신 함수 인자 전달하기
+        - this.setState를 사용하여 state 값을 업데이트할 때는 상태가 비동기적으로 업데이트된다.
+        - 만약 다음과 같이 onClick에 설정한 함수 내부에서 this.setState를 두 번 호출하면 어떻게 되는가?
+        ```js
+        onClick={() => {
+            // this.setState를 사용하여 state에 새로운 값을 넣을 수 있다.
+            this.setState({ number: number + 1 });
+            this.setState({ number: this.state.number + 1 });
+        }}
+        ```
+        - 결과: this.setState를 두 번 사용하는 것임에도 불구하고 버튼을 클릭할 때 숫자가 1씩 더해진다. 
+        - this.setState를 사용한다고 해서 state 값이 바로 바뀌지는 않는다.
+            <br /><br />
+        - 해결책: this.setState를 사용할 때 객체 대신에 함수를 인자로 넣어준다.
+        ```js
+        this.setState((prevState, props) => {
+            return {
+                // 업데이트하고 싶은 내용
+            }
+        })
+        ```
+        - prevState는 기존 상태이고, props는 현재 지니고 있는 props를 가리킨다. 만약 업데이트하는 과정에서 props가 필요하지 않다면 생략해도 된다.
+        <br /><br />
+    - this.setState가 끝난 후 특정 작업 실행하기
+    <br /><br />
+- 함수 컴포넌트에서 useState 사용하기
+    
 
 ### 3.5 state를 사용할 때 주의 사항
 
