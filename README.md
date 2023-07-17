@@ -776,12 +776,95 @@ props는 properties를 줄인 표현으로 컴포넌트 속성을 설정할 때 
         })
         ```
         - prevState는 기존 상태이고, props는 현재 지니고 있는 props를 가리킨다. 만약 업데이트하는 과정에서 props가 필요하지 않다면 생략해도 된다.
+        ```js
+        <button
+            // onClick을 통해 버튼이 클릭되었을 때 호출할 함수를 지정한다.
+            onClick={() => {
+                this.setState(prevState => {
+                    return {
+                        number: prevState.number + 1
+                        };
+                    });
+                    // 위 코드와 아래 코드는 완전히 똑같은 기능을 한다.
+                    // 아래 코드는 함수에서 바로 객체를 반환한다는 의미이다.
+                    this.setState(prevState => ({
+                        number: prevState.number + 1
+                    }));
+                }}
+            >   
+               +1
+            </button>
+        ```
         <br /><br />
     - this.setState가 끝난 후 특정 작업 실행하기
+        - setState를 사용하여 값을 업데이트하고 난 다음에 특정 작업을 하고 싶을 때는 setState의 두 번째 파라미터로 콜백 함수를 등록하여 작업을 처리할 수 있다.
+        ```js
+        <button
+            // onClick을 통해 버튼이 클릭되었을 때 호출할 함수를 지정한다.
+            onClick={() => {
+                this.setState(
+                {
+                    number: number + 1
+                },
+                () => {
+                    console.log('방금 setState가 호출되었다.');
+                    console.log(this.state);
+                    }
+                );
+            }}
+        >   
+          +1
+        </button>
+        ```
     <br /><br />
 - 함수 컴포넌트에서 useState 사용하기
-    
+    - 배열 비구조화 할당
+        - 배열 안에 들어 있는 값을 쉽게 추출할 수 있도록 해주는 문법
+        ```js
+        const array = [1, 2];
+        
+        const one = array[0];
+        const two = array[1];
 
+        const [one, two] = array;
+        ```
+    - useState 사용하기
+        ```js
+        import { useState } from "react";
+
+        const Say = () => {
+            const [message, setMessage] = useState('');
+            const onClickEnter = () => setMessage('안녕하세요!');
+            const onClickLeave = () => setMessage('안녕히 가세요!');
+
+            return (
+                <div>
+                    <button onClick={onClickEnter}>입장</button>
+                    <button onClick={onClickLeave}>퇴장</button>
+                    <h1>{message}</h1>
+                </div>
+            );
+        };
+
+        export default Say;
+        ```
+    - 한 컴포넌트에서 useState 여러 번 사용하기
+        ```js
+        const [color, setColor] = useState('black');
+
+        return (
+            <div>
+                <button onClick={onClickEnter}>입장</button>
+                <button onClick={onClickLeave}>퇴장</button>
+                <h1 style={{ color }}>{message}</h1>
+                <button style={{ color: 'red' }} onClick={() => setColor('red')}>빨간색</button>
+                <button style={{ color: 'green' }} onClick={() => setColor('green')}>초록색</button>
+                <button style={{ color: 'blue' }} onClick={() => setColor('blue')}>파란색</button>
+            </div>
+        );
+        ```
+    
+    <br /><br />
 ### 3.5 state를 사용할 때 주의 사항
 
 ### 3.6 정리
