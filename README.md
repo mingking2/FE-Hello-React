@@ -967,8 +967,102 @@ props는 properties를 줄인 표현으로 컴포넌트 속성을 설정할 때 
     - input의 value 값을 state에 있는 값으로 설정한다.
 <br /><br />
 - 버튼을 누를 때 comment 값을 공백으로 설정
+    ```js
+    <button onClick={
+        () => {
+                alert(this.state.message);
+                this.setState({
+                    message: ''
+                });
+        }
+    }>확인</button>
+    ```
+<br /><br />
+- 임의 메서드 만들기
+    - 이벤트를 처리할 때 렌더링하는 동시에 함수를 만들어서 전달했다.
+    - 이 방법 대신 함수를 미리 준비하여 전달하는 방법도 있다.
+        - 성능 차이는 거의 없지만, 가독성이 훨씬 높다.
+    - onChange와 onClick에 전달한 함수를 따로 빼내서 컴포넌트 임의 메서드를 만들자.
+    ```js
+    constructor(props) {
+        super(props);
+        this.handleChange = this.handleChange.bind(this);
+        this.handleClick = this.handleClick.bind(this);
+    }
 
+    handleChange(e) {
+        this.setState({
+            message: e.target.value
+        });
+    }
 
+    handleClick() {
+        alert(this.state.message);
+        this.setState({
+            message: ''
+        });
+    }
+
+    render() {
+        return (
+            <div>
+                <h1>이벤트 연습</h1>
+                <input
+                    type="text"
+                    name="message"
+                    placeholder="아무거나 입력해 보세요"
+                    value={this.state.message}
+                    onChange={this.handleChange}
+                />
+                <button onClick={this.handleClick}>확인</button>
+            </div>
+        );
+    }
+    ```
+    - 함수가 호출될 때 this는 호출부에 따라 결정되므로, 클래스의 임의 메서드가 특정 HTML 요소의 이벤트로 등록되는 과정에서 메서드와 this의 관계가 끊어져 버린다.
+    - 이 때문에 임의 메서드가 이벤트로 등록되어도 this를 컴포넌트 자신으로 제대로 가리키기 위해서는 메서드를 this와 바인딩하는 작업이 필요하다.
+    - 만약 바인딩하지 않는 경우라면 this가 undefined를 가리키게 된다.
+        - 현재 constructor 함수에서 함수를 바인딩하는 작업이 이루어지고 있다.
+<br /><br />
+- Property Initializer Syntax를 사용한 메서드 작성
+    - 메서드 바인딩은 생성자 메서드에서 하는 것이 정석이다.
+    - 새 메서드를 만들 때마다 constructor를 수정해야하기 때문에 불편하다.
+    <br /><br />
+    - 바벨의 transform-class-properties 문법을 사용하여 화살표 함수 형태로 메서드를 정의한다.
+    ```js
+    handleChange = (e) => {
+        this.setState({
+            message: e.target.value
+        });
+    }
+
+    handleClick = () => {
+        alert(this.state.message);
+        this.setState({
+            message: ''
+        });
+    }
+
+    
+    render() {
+        return (
+            <div>
+                <h1>이벤트 연습</h1>
+                <input
+                    type="text"
+                    name="message"
+                    placeholder="아무거나 입력해 보세요"
+                    value={this.state.message}
+                    onChange={this.handleChange}
+                />
+                <button onClick={this.handleClick}>확인</button>
+            </div>
+        );
+    }
+    ```
+<br /><br />
+- input 여러 개 다루기
+    - event 객체를 활용하여 e.target.name 값을 사용한다.
 <br /><br />
 
 ### 4.3 함수 컴포넌트로 구현해 보기
