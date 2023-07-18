@@ -896,10 +896,87 @@ props는 properties를 줄인 표현으로 컴포넌트 속성을 설정할 때 
 ![Alt text](<images/props와 state 요약.png>)
 <br /><br />
 **앞으로 새로운 컴포넌트를 만들 때는 useState를 사용할 것을 권장한다.**
-
+<br /><br />
 
 
 ## 4장 이벤트 핸들링
+사용자가 웹 브라우저에서 DOM 요소들과 상호 작용하는 것을 이벤트라고 한다.
+<br /><br />
+
+### 4.1 리액트의 이벤트 시스템
+- 이벤트를 사용할 때 주의 사항
+    1. 이벤트 이름은 카멜 표기법으로 작성한다.
+    2. 이벤트를 실행할 자바스크립트 코드를 전달하는 것이 아니라, 함수 형태의 값을 전달한다.
+    3. DOM 요소에만 이벤트를 설정할 수 있다.
+<br /><br />
+- 이벤트 종류
+    - Clipboard
+    - Composition
+    - Keyboard
+    - Focus
+    - Form
+    - Mouse
+    - Selection
+    - Touch
+    - UI
+    - Wheel
+    - Media
+    - Image
+    - Animation
+    - Transition
+<br /><br />
+
+### 4.2 예제로 이벤트 핸들링 익히기
+- 컴포넌트 생성
+- App.js에서 EventPractice 렌더링
+- onChange 이벤트 핸들링하기
+    ```js
+    <input
+        type="text"
+        name="message"
+        placeholder="아무거나 입력해 보세요"
+        onChange={
+            (e) => {
+                console.log(e.target.value);
+            }
+        }
+     />
+    ```
+    - 콘솔에 기록되는 e 객체는 SyntheticEvent로 웹 브라우저의 네이티브 이벤트를 감싸는 객체이다.
+    - SyntheticEvent는 네이티브 이벤트와 달리 이벤트가 끝나고 나면 이벤트가 초기화되므로 정보를 참조할 수 없다.
+    - 만약 비동기적으로 이벤트 객체를 참조할 일이 있다면 e.persist() 함수를 호출해야 한다.
+    - 변할 인풋 값인 **e.target.value**를 콘솔에 기록한다.
+<br /><br />
+- state에 input 값 담기 
+    ```js
+    <input
+        type="text"
+        name="message"
+        placeholder="아무거나 입력해 보세요"
+        value={this.state.message}
+        onChange={
+            (e) => {
+                this.setState({
+                    message: e.target.value
+                })
+            }
+        }
+    />
+    ```
+    - 생성자 메서드인 constructor에서 state 초깃값을 설정하고, 이벤트 핸들링 함수 내부에서 this.setState 메서드를 호출하여 state를 업데이트한다.
+    - input의 value 값을 state에 있는 값으로 설정한다.
+<br /><br />
+- 버튼을 누를 때 comment 값을 공백으로 설정
+
+
+<br /><br />
+
+### 4.3 함수 컴포넌트로 구현해 보기
+<br /><br />
+
+### 4.4 정리
+<br /><br />
+
 ## 5장 ref: DOM에 이름 달기
 ## 6장 컴포넌트 반복
 ## 7장 컴포넌트의 라이프사이클 메서드
@@ -907,7 +984,7 @@ props는 properties를 줄인 표현으로 컴포넌트 속성을 설정할 때 
 ## 9장 컴포넌트 스타일링
 ## 10장 일정 관리 웹 애플리케이션 만들기
 ## 11장 컴포넌트 성능 최적화
-## 12장 immer를 사용하여 더 쉽게 불변성 유지하기
+## 12장 immer를 사용하여 더 쉽게 불변성 유지하기ㄴ
 ## 13장 리액트 라우터로 SPA 개발하기
 ## 14장 외부 API를 연동하여 뉴스 뷰어 만들기
 ## 15장 Context API
