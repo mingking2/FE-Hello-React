@@ -1132,9 +1132,113 @@ props는 properties를 줄인 표현으로 컴포넌트 속성을 설정할 때 
 <br /><br />
 
 ### 4.3 함수 컴포넌트로 구현해 보기
+- 방금 우리가 했던 작업을 함수 컴포넌트로 똑같이 구현해보자
+```js
+import { useState } from "react";
+
+const EventPractice = () => {
+    const [username, setUsername] = useState('');
+    const [message, setMessage] = useState('');
+    const onChangeUsername = e => setUsername(e.target.value);
+    const onChangeMessage = e => setMessage(e.target.value);
+    const onClick = () => {
+        alert(username + ": " + message);
+        setUsername('');
+        setMessage('');
+    };
+    const onKeyPress = e => {
+        if(e.key === 'Enter') {
+            onClick();
+        }
+    };
+    return (
+        <div>
+            <h1>이벤트 연습</h1>
+            <input 
+                type="text"
+                name="username"
+                placeholder="사용자명"
+                value={username}
+                onChange={onChangeUsername}
+            />
+            <input
+                type="text"
+                name="message"
+                placeholder="아무거나 입력해 보세요"
+                value={message}
+                onChange={onChangeMessage}
+                onKeyPress={onKeyPress}
+            />
+            <button onClick={onClick}>확인</button>
+        </div>
+    );
+};
+export default EventPractice;
+```
+- 위 코드는 e.target.name을 활용하지 않고 onChange 관련 함수 두 개를 따로 만들었다.
+- input의 개수가 많아진다면 e.target.name을 활용하는 것이 더 좋을 수 있다.
+<br /><br />
+<br /><br />
+- 이번에는 useState를 통해 사용하는 상태에 문자열이 아닌 객체를 넣어 보자.
+```js
+import { useState } from "react";
+
+const EventPractice = () => {
+    const [form, setForm] = useState({
+        username: '',
+        message: ''
+    });
+    const { username, message } = form;
+    const onChange = e => {
+        const nextForm = {
+            ...form, // 기존의 form 내용을 이 자리에 복사한 뒤
+            [e.target.name]: e.target.value // 원하는 값을 덮어 씌우기
+        };
+        setForm(nextForm);
+    };
+    const onClick = () => {
+        alert(username + ": " + message);
+        setForm({
+            username: '',
+            message: ''
+        });
+    };
+    const onKeyPress = e => {
+        if(e.key === 'Enter') {
+            onClick();
+        }
+    };
+    return (
+        <div>
+            <h1>이벤트 연습</h1>
+            <input 
+                type="text"
+                name="username"
+                placeholder="사용자명"
+                value={username}
+                onChange={onChange}
+            />
+            <input
+                type="text"
+                name="message"
+                placeholder="아무거나 입력해 보세요"
+                value={message}
+                onChange={onChange}
+                onKeyPress={onKeyPress}
+            />
+            <button onClick={onClick}>확인</button>
+        </div>
+    );
+};
+export default EventPractice;
+```
+- e.target.name 값을 활용하려면, 위와 같이 useState를 쓸 때 input 값들이 들어 있는 form 객체를 사용하면 된다.
+
 <br /><br />
 
 ### 4.4 정리
+- 리액트에서 이벤트를 다루는 것은 순수 자바스크립트 또는 jQuery를 사용한 웹 애플리케이션에서 이벤트를 다루는 것과 비슷하다.
+- 기존 HTML DOM Event를 알고 있다면 리액트의 컴포넌트 이벤트도 쉽게 다룰 수 있을 것이다.
 <br /><br />
 
 ## 5장 ref: DOM에 이름 달기
