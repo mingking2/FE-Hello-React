@@ -4,6 +4,7 @@ import Timer from "./Timer.js";
 import Counter from "./Counter.js";
 import Say from "./Say.js";
 import EventPractice from "./EventPractice.js";
+import ValidationSample from "./ValidationSample.js";
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
       <Counter />
       <Say />
       <EventPractice />
+      <ValidationSample />
     </div>
   );
 };
