@@ -5,6 +5,7 @@ import Counter from "./Counter.js";
 import Say from "./Say.js";
 import EventPractice from "./EventPractice.js";
 import ValidationSample from "./ValidationSample.js";
+import ScrollBox from "./ScrollBox.js";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
       <Say />
       <EventPractice />
       <ValidationSample />
+      <ScrollBox />
     </div>
   );
 };

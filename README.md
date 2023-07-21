@@ -1240,7 +1240,7 @@ export default EventPractice;
 - 리액트에서 이벤트를 다루는 것은 순수 자바스크립트 또는 jQuery를 사용한 웹 애플리케이션에서 이벤트를 다루는 것과 비슷하다.
 - 기존 HTML DOM Event를 알고 있다면 리액트의 컴포넌트 이벤트도 쉽게 다룰 수 있을 것이다.
 <br /><br />
-
+<br /><br />
 
 ## 5장 ref: DOM에 이름 달기
 HTML에서 id를 사용하여 DOM에 이름을 다는 것처럼 리액트에서 DOM에 이름을 다는 방법은 ref 개념이다.
@@ -1300,12 +1300,86 @@ export default ValidationSample;
 
 ### 5.2 ref 사용
 - 콜백 함수를 통한 ref 설정
+    - ref를 만드는 가장 기본적인 방법은 콜백 함수를 사용하는 것이다.
+    - ref를 달고자 하는 요소에 ref라는 콜백 함수를 props로 전달해 주면 된다.
+    - 이 콜백함수는 ref 값을 파라미터로 전달받고 함수 내부에서 파라미터로 받은 ref를 컴포넌트의 멤버 변수로 설정해준다.
+    <br /><br />    
+    - `<input ref={(ref) => {this.input=ref}} />`
+        - this.input은 input 요소의 DOM을 가리킨다. ref의 이름은 원하는 것으로 자유롭게 지정할 수 있다. DOM 타입과 관계없이 this.superman = ref처럼 마음대로 지정한다.
+        <br /><br />    
 - createRef를 통한 ref 설정
-- 적용
+    - ref를 만드는 또 다른 방법은 리액트에 내장되어 있는 createRef라는 함수를 사용하는 것이다.
+    - 이 함수를 사용해서 만들면 더 적은 코드로 쉽게 사용할 수 있다. 이 기능은 리액트 v16.3부터 도입되었다.
+    ```js
+    import { Component } from 'react';
 
+    class RefSample extends Component {
+        input = React.createRef();
+
+        handleFocus = () => {
+            this.input.current.focus();
+        }
+
+        render() {
+            return (
+                <div>
+                    <input ref={this.input} />
+                </div>
+            );
+        }
+    }
+
+    export default RefSample;
+    ```
+    - createRef를 사용하여 ref를 만들려면 우선 컴포넌트 내부에서 멤버 변수로 React.createRef()를 담아 주어야 한다. 그리고 해당 맴버 변수를 ref를 달고자하는 요소에 ref props로 넣어 주면 ref 설정이 완료된다.
+    - 설정한 뒤 나중에 ref를 설정해 준 DOM에 접근하려면 this.input.current를 조회하면 된다. 콜백 함수를 사용할 때와 다른 점은 이렇게 뒷부분에 .current를 넣어 주어야 한다는 것이다.
+    <br /><br />   
+- 적용
+    - input 요소를 클릭하면 포커스가 되면서 텍스트 커서가 깜박인다. 버튼을 누르면 포커스가 버튼으로 넘어가면서 왼쪽 input 요소의 텍스트 커서가 더 이상 보이지 않는다.
+    - 버튼을 한 번 눌렀을 때, 포커스가 다시 input 쪽으로 자동으로 넘어가도록 코드를 작성해 보자.
+        1. input에 ref 달기
+            ```js
+            <input
+                ref={(ref) => this.input=ref} 
+                (...)
+            />
+            ```
+        2. 버튼 onClick 이벤트 코드 수정
+            - 버튼에서 onClick 이벤트가 발생할 때 input에 포커스를 주도록 코드 수정
+            ```js       
+            handleButtonClick = () => {
+                this.setState({
+                    clicked: true,
+                validated: this.state.password === '0000'
+                });
+                this.input.focus();
+            }
+            ```
 
 <br /><br />
 ### 5.3 컴포넌트에 ref 달기
+- 리액트에서는 컴포넌트에도 ref를 달 수 있다. 이 방법은 주로 컴포넌트 내부에 있는 DOM을 컴포넌트 외부에서 사용할 때 쓴다.
+<br /><br />
+1. 사용법
+    ```js
+    <MyComponent 
+        ref={(ref) => {this.myComponent=ref}}
+    />
+    ```
+    - MyComponent 내부의 메서드 및 멤버 변수에도 접근할 수 있다. 즉, 내부의 ref에도 접근할 수 있다.
+    - 이번에는 스크롤 박스가 있는 컴포넌트를 하나 만들고, 스크롤바를 아래로 내리는 작업을 부모 컴포넌트에서 실행하자.
+    <br /><br />
+2. 컴포넌트 초기 설정
+    - 스크롤 박스를 만들고 최상위 DOM에 ref를 달자
+3. 컴포넌트에 메서드 생성
+    - 컴포넌트에 스크롤바를 맨 아래쪽으로 내리는 메서드를 만들자
+        - scrollTop: 세로 스크롤바 위치(0~350)
+        - scrollHeight: 스크롤이 있는 박스 안의 div 높이(650)
+        - clientHeight: 스크롤이 있는 박스의 높이(300)
+    - 스크롤바 맨 아래쪽으로 내리려면 scrollHeight에서 clientHeight 높이를 빼면 된다.
+
+4. 컴포넌트에 ref 달고 내부 메서드 사용
+
 ### 5.4 정리
 
 ## 6장 컴포넌트 반복
