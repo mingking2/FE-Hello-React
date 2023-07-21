@@ -1443,6 +1443,20 @@ export default App;
 <br /><br />
 
 ### 6.2 데이터 배열을 컴포넌트 배열로 변환하기
+1. 컴포넌트 수정하기
+```js
+const IterationSample = () => {
+   const names = ['눈사람', '얼음', '눈', '바람'];
+   const nameList = names.map(name => <li>{name}</li>);
+   return <ul>{nameList}</ul>;
+};
+
+export default IterationSample;
+```
+<br /><br />
+2. App 컴포넌트에서 예제 컴포넌트 렌더링
+    - "key" prop이 없다는 경고 메세지를 표시했다. key가 뭐지?
+<br /><br />
 <br /><br />
 
 ### 6.3 key
