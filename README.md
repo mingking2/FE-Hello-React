@@ -1371,18 +1371,70 @@ export default ValidationSample;
     <br /><br />
 2. 컴포넌트 초기 설정
     - 스크롤 박스를 만들고 최상위 DOM에 ref를 달자
+    <br /><br />
 3. 컴포넌트에 메서드 생성
     - 컴포넌트에 스크롤바를 맨 아래쪽으로 내리는 메서드를 만들자
         - scrollTop: 세로 스크롤바 위치(0~350)
         - scrollHeight: 스크롤이 있는 박스 안의 div 높이(650)
         - clientHeight: 스크롤이 있는 박스의 높이(300)
     - 스크롤바 맨 아래쪽으로 내리려면 scrollHeight에서 clientHeight 높이를 빼면 된다.
-
+    ```js
+    ScrollBottom = () => {
+      const { scrollHeight, clientHeight } = this.box;
+      this.box.scrollTop = scrollHeight - clientHeight;
+    }
+    ```
+<br /><br />
 4. 컴포넌트에 ref 달고 내부 메서드 사용
 
+```js
+import { Component } from "react";
+import ScrollBox from "./ScrollBox";
+
+class App extends Component {
+    render() {
+        return (
+            <div>
+                <ScrollBox ref={(ref) => this.ScrollBox=ref}/>
+                 <button onClick={() => this.ScrollBox.ScrollBottom()}>
+                    맨 밑으로
+                </button>
+            </div>
+        );
+    } 
+}
+
+export default App;
+```
+- 문법상으로는 onClick = {this.scrollBox.scrollBottom} 같은 형식으로 작성해도 틀린 것은 아니다.
+- 하지만 컴포넌트가 처음 렌더링될 때는 this.scrollBox 값이 undefined이므로 this.scrollBox.scrollToBottom 값을 읽어 오는 과정에서 오류가 발생한다. 
+- 화살표 함수 문법을 사용하여 아예 새로운 함수를 만들고 그 내부에서 this.scrollBox.scrollToBottom 메서드를 실행하면, 버튼을 누를 때(이미 한 번 렌더링을 해서 this.scrollBox를 설정한 시점) this.scrollBox.scrollToBottom 값을 읽어 와서 실행하므로 오류가 발생하지 않는다.
+<br /><br />
+
 ### 5.4 정리
+- 컴포넌트 내부에서 DOM에 직접 접근해야 할 대는 ref를 사용한다. 먼저 ref를 사용하지 않고도 원하는 기능을 구현할 수 있는지 반드시 고려한 후에 활용해야 한다.
+<br /><br />
+- 서로 다른 컴포넌트끼리 데이터를 교류할 때 ref를 사용한다면 이는 잘못된 사용이다. 앱 규모가 커지면 구조가 꼬여 버려서 유지 보수가 불가능하다. 컴포넌트끼리 데이터를 교류할 때는 언제나 데이터를 부모, 자식 흐름으로 교류해야 한다.
+<br /><br />
+<br /><br />
 
 ## 6장 컴포넌트 반복
+### 6.1 자바스크립트 배열의 map() 함수
+
+<br /><br />
+
+### 6.2 데이터 배열을 컴포넌트 배열로 변환하기
+<br /><br />
+
+### 6.3 key
+<br /><br />
+
+### 6.4 응용
+<br /><br />
+
+### 6.5 정리
+<br /><br />
+<br /><br />
 ## 7장 컴포넌트의 라이프사이클 메서드
 ## 8장 Hooks
 ## 9장 컴포넌트 스타일링
