@@ -1,20 +1,13 @@
-import { Component } from "react";
-import ScrollBox from "./ScrollBox";
-import IterationSample from "./IterationSample";
+import React from 'react';
+import CountdownTimer from './CountDownTimer';
 
-class App extends Component {
-  render() {
-    return (
-      <div>
-        <IterationSample />
-        <ScrollBox ref={(ref) => this.ScrollBox=ref}/>
-        <button onClick={() => this.ScrollBox.ScrollBottom()}>
-          맨 밑으로
-        </button>
-      </div>
-      
-    );
-  }
+const App = () => {
+  return (
+    <div>
+      <h1>카운트 다운 타이머</h1>
+      <CountdownTimer />
+    </div>
+  );
 }
 
 export default App;
