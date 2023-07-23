@@ -80,7 +80,7 @@ const CountdownTimer = () => {
       </ButtonWrapper>
       <br />
       <InputTime
-        type="number"
+        min="0"
         value={time}
         onChange={(e) => setTime(parseInt(e.target.value))}
         disabled={isRunning}
