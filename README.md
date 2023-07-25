@@ -1660,13 +1660,37 @@ Will 접두사가 붙은 메서드는 어떤 작업을 작동하기 **전**에 �
     - 프로젝트 성능을 최적화할 때, 상황에 맞는 알고리즘을 작성하여 리렌더링을 방지할 때는 false 값을 반환하게 한다. 컴포넌트를 최적화하는 부분은 앞으로 리액트를 공부하면서 더 자세히 알아보자.
 <br /><br />
 6. getSnapshotBeforeUpdate 메서드
-    - 리액트 v16.3 이후 만든 메서드이다. 이 메서드는 render에서 만들어진 결과물이 브라우저
+    - 리액트 v16.3 이후 만든 메서드이다. 이 메서드는 render에서 만들어진 결과물이 브라우저에 실제로 반영되기 직전에 호출된다. 
+    - 이 메서드에서 반환하는 값은 componentDidUpdate에서 세 번째 파라미터인 snapshot 값으로 전달받을 수 있다. 주로 업데이트하기 직전의 값을 참고할 일이 있을 때 활용된다.(예: 스크롤바 위치 유지)
+    ```js
+    getSnapShotBeforeUpdate(prevProps, prevState) {
+        if(prevState.array !== this.state.array) {
+            const { scrollTop, scrollHeight } = this.list
+            return { scrollTop, scrollHeight };
+        }
+    }
+    ```
 <br /><br />
 7. componentDidUpdate 메서드
+- `componentDidUpdate(prevProps, prevState, snapshot) { ... }`
+    - 이것은 리렌더링을 완료한 후 실행한다. 업데이트가 끝난 직후이므로, DOM 관련 처리를 해도 무방하다. 여기서는 prevProps 또는 prevState를 사용하여 컴포넌트가 이전에 가졌던 데이터에 접근할 수 있다. 또 getSnapshotBeforeUpdate에서 반환한 값이 있다면 여기서 snapshot 값을 전달받을 수 있다.
 <br /><br />
 8. componentWillUnmount 메서드
+- `componentWillUnmount() { ... }`
+    - 이것은 컴포넌트를 DOM에서 제거할 때 실행한다. componentDidMount에서 등록한 이벤트, 타이머, 직접 생성한 DOM이 있다면 여기서 제거 작업을 해야 한다.
 <br /><br />
 9. componentDidCatch 메서드
+- 리액트 v16에서 새롭게 도입되었으며, 컴포넌트 렌더링 도중에 에러가 발생했을 때 애플리케이션이 먹통이 되지 않고 오류 UI를 보여 줄 수 있게 해준다.
+```js
+componentDidCatch(error, info) {
+    this.setState({
+        error: true
+    });
+    console.log({ error, info });
+}
+```
+- 여기서 error는 파라미터에 어떤 에러가 발생했는지 알려 주며, info 파라미터는 어디에 있는 코드에서 오류가 발생했는지에 대한 정보를 준다. 앞의 콛에서는 그저 console.log만 했지만, 나중에 실제로 사용할 때 오류가 발생하면 서버 API를 호출하여 따로 수집할 수도 있다.
+- 그러나 이 메서드를 사용할 때는 컴포넌트 자신에게 발생하는 에러를 잡아낼 수 없고 자신의 this.prop.children으로 전달되는 컴포넌트에서 발생하는 에러만 잡아낼 수 있다는 점을 알아두어야 한다.
 <br /><br />
 ### 7.3 라이프사이클 메서드 사용하기
 <br /><br />
