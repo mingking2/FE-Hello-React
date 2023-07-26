@@ -1693,6 +1693,20 @@ componentDidCatch(error, info) {
 - 그러나 이 메서드를 사용할 때는 컴포넌트 자신에게 발생하는 에러를 잡아낼 수 없고 자신의 this.prop.children으로 전달되는 컴포넌트에서 발생하는 에러만 잡아낼 수 있다는 점을 알아두어야 한다.
 <br /><br />
 ### 7.3 라이프사이클 메서드 사용하기
+1. LifeCycleSample.js
+    - 이 컴포넌트는 각 라이프사이클 메서드를 실행할 때마다 콘솔 디버거에 기록하고, 부모 컴포넌트에서 props로 색상을 받아 버튼을 누르면 state.number 값을 1씩 더한다.
+    
+    - getDerivedStateFromProps는 부모에게서 받은 color 값을 state에 동기화하고 있다. 그리고 getSnapshotBeforeUpdate는 DOM에 변화가 일어나기 직전의 색상 속성을 snapshot 값으로 반환하여 이것을 componentDidUpdate에서 조회할 수 있게 했다.
+
+    - 추가로 shouldComponentUpdate 메서드에서 state.number 값의 마지막 자리 수가 4이면(예: 4, 14, 24, 34) 리렌더링을 취소하도록 설정했다.
+    <br /><br />
+2. App.js
+    - getRandomColor 함수는 state의 color 값을 랜덤 색상으로 설정한다. 16777215를 hex로 표현하면 ffffff가 되므로 해당 코드는 000000부터 ffffff 값을 반환한다.
+
+    - 버튼을 렌더링하고, 누를 때마다 handleClick 메서드가 호출되게 이벤트를 설정하며, 불러온 LifeCycleSample 컴포넌트에 color 값을 props로 설정한다.
+  <br /><br />
+3. 에러 잡아내기
+    - 방금 만든 LifeCycleSample 컴포넌트의 render 함수에서 의도적으로 에러를 한번 발생시켜 보겠다. render 함수에서의 에러는 주로 존재하지 않는 함수를 사용하려고 하거나, 존재하지 않는 객체의 값을 조회하려고 할 때 발생한다.   
 <br /><br />
 ### 7.4 정리
 <br /><br />
