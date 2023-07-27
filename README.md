@@ -1994,7 +1994,62 @@ componentDidCatch(error, info) {
     export default Info;
     ```
      - useReducer에서의 액션은 그 어떤 값도 사용 가능하다. 그래서 이번에는 이벤트 객체가 지니고 있는 e.target 값 자체를 액션 값으로 사용했다. 이런 식으로 인풋을 관리하면 아무리 인풋의 개수가 많아져도 코드를 짧고 깔끔하게 유지할 수 있다.
+     <br><br>
+     <br><br>
 ### 8.4 useMemo
+- useMemo를 사용하면 함수 컴포넌트 내부에서 발생하는 연산을 최적화할 수 있다. 
+- 먼저 리스트에 숫자를 추가하면 추가된 숫자들의 평균을 보여 주는 함수 컴포넌트를 작성해보자.
+    ```js
+    import { useState } from "react";
+
+    const getAverage = numbers => {
+        console.log('평균값 계산 중..');
+        if (numbers.length === 0) return 0;
+        const sum = numbers.reduce((a,b) => a + b);
+        return sum/numbers.length;
+    };
+
+    const Average = () => {
+        const [list, setList] = useState([]);
+        const [number, setNumber] = useState('');
+
+        const onChange = e => {
+            setNumber(e.target.value);
+        };
+        const onInsert = e => {
+            const nextList = list.concat(parseInt(number));
+            setList(nextList);
+            setNumber('');
+        };
+
+        return (
+            <div>
+                <input value={number} onChange={onChange} />
+                <button onClick={onInsert}>등록</button>
+                <ul>
+                    {list.map((value, index) => (
+                        <li key={index}>{value}</li>
+                    ))}
+                </ul>
+                <div>
+                    <b>평균값:</b> {getAverage(list)}
+                </div>
+            </div>
+        );
+    };
+
+    export default Average;
+    ```
+    - 숫자를 등록할 때뿐만 아니라 인풋 내용이 수정될 때도 우리가 만든 getAverage 함수가 호출되는 것을 확인할 수 있다. 인풋 내용이 바뀔 때는 평균값을 다시 계산할 필요가 없다.
+    <br><br>
+- useMemo Hook을 사용하여 최적화하자. 렌더링하는 과정에서 특정 값이 바뀌었을 때만 연산을 실행하고, 원하는 값이 바뀌지 않았다면 이전에 연산했던 결과를 다시 사용하는 방식이다.
+
+    ```js
+    const avg = useMemo(() => getAverage(list), [list])
+    ```
+    - 이제 list 배열의 내용이 바뀔 때만 getAverage 함수가 호출된다.
+    <br><br>
+    <br><br>
 ### 8.5 useCallback
 
 ## 9장 컴포넌트 스타일링
