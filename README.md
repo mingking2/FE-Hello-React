@@ -2078,6 +2078,99 @@ componentDidCatch(error, info) {
     <br><br>
     <br><br>
 ### 8.6 useRef
+- useRef Hook은 함수 컴포넌트에서 ref를 쉽게 사용할 수 있도록 해준다. 
+- Average 컴포넌트에서 등록 버튼을 눌렀을 때 포커스가 인풋 쪽으로 넘어가도록 코드를 작성하자.
+    ```js
+    const Average = () => {
+        const [list, setList] = useState([]);
+        const [number, setNumber] = useState('');
+        const inputEl = useRef(null);
+
+        const onChange = useCallback(e => {
+            setNumber(e.target.value);
+        }, []); // 컴포넌트가 처음 렌더링될 때만 함수 생성
+        const onInsert = useCallback(e => {
+            const nextList = list.concat(parseInt(number));
+            setList(nextList);
+            setNumber('');
+            inputEl.current.focus();
+        }, [number, list]); // number 혹은 list가 바뀌었을 때만 함수 생성
+
+        const avg = useMemo(() => getAverage(list), [list])
+
+        return (
+            <div>
+                <input value={number} onChange={onChange} ref={inputEl} />
+                <button onClick={onInsert}>등록</button>
+                <ul>
+                    {list.map((value, index) => (
+                        <li key={index}>{value}</li>
+                    ))}
+                </ul>
+                <div>
+                    <b>평균값:</b> {avg}
+                </div>
+            </div>
+        );
+    };
+    ```
+    - useRef를 사용하여 ref를 설정하면 useRef를 통해 만든 객체 안의 current 값이 실제 엘리먼트를 가리킨다.
+<br><br>
+
+- 로컬 변수 사용하기
+    - 추가로 컴포넌트 로컬 변수를 사용해야 할 때도 useRef를 활용할 수 있다. 여기서 로컬 변수란 렌더링과 상관없이 바뀔 수 있는 값을 의미한다.
+        - 클래스 형태로 작성된 컴포넌트
+            ```js
+            import { Component } from 'react';
+
+            class MyComponent extends Component {
+                id = 1
+                setId = (n) => {
+                    this.id = n;
+                }
+                printId = () => {
+                    console.log(this.id);
+                }
+                render() {
+                    return (
+                        <div>
+                            MyComponent
+                        </div>
+                    );
+                }
+            }
+
+            export default MyComponent;
+            ```
+        - 함수 형태로 작성된 컴포넌트
+            ```js
+            import { useRef } from 'react';
+
+            const RefSample = () => {
+                const id = useRef(1);
+                const setId = (n) => {
+                    id.current = n;
+                }
+                const printId = () => {
+                    console.log(id.current);
+                }
+                return (
+                    <div>
+                        refsample
+                    </div>
+                );
+            };
+
+            export default RefSample;
+            ```
+    - **ref 안의 값이 바뀌어도 컴포넌트가 렌더링되지 않는다는 점을 주의해야 한다.** 렌더링과 관련되지 않은 값을 관리할 때만 이러한 방식으로 코드를 작성하자.
+<br><br>
+<br><br>
+
+### 8.7 커스텀 Hooks 만들기
+
+### 8.8 다른 Hooks
+### 8.9 정리
 
 ## 9장 컴포넌트 스타일링
 ## 10장 일정 관리 웹 애플리케이션 만들기
