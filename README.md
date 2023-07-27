@@ -2168,9 +2168,70 @@ componentDidCatch(error, info) {
 <br><br>
 
 ### 8.7 커스텀 Hooks 만들기
+- 여러 컴포넌트에서 비슷한 기능을 공유할 경우, 이를 Hook으로 작성해서 로직을 재사용할 수 있다.
+- 기존 Info 컴포넌트에서 여러 개의 인풋을 관리하기 위해 useReducer로 작성했던 로직을 useInputs라는 Hook으로 따로 분리하자.
+    - useInputs.js
+        ```js
+        import { useReducer } from "react";
+
+        function reducer(state, action) {
+            return {
+                ...state,
+                [action.name]: action.value
+            };
+        }
+
+        export default function useInputs(initialForm) {
+            const [state, dispatch] = useReducer(reducer, initialForm);
+            const onChange = e => {
+                dispatch(e.target);
+            };
+            return [state, onChange];
+        }
+        ```
+    - Info.js
+        ```js
+        const Info = () => {
+            const [state, dispatch] = useInputs({
+                name: '',
+                nickname: ''
+            });
+            
+            const { name, nickname } = state;
+            const onChange = e => {
+                dispatch(e.target);
+            };
+
+            return (
+                <div>
+                    <div>
+                        <input name="name" value={name} onChange={onChange} />
+                        <input name="nickname" value={nickname} onChange={onChange} />
+                    </div>
+                    <div>
+                        <div>
+                            <b>이름:</b> {name}
+                        </div>
+                        <div>
+                            <b>닉네임:</b> 
+                            {nickname}
+                        </div>
+                    </div>
+                </div>
+            );
+        };  
+        ```
+<br><br>
+<br><br>
 
 ### 8.8 다른 Hooks
+- 다양한게 있따 라이브러리 ㅋㅋ
+<br><br>
+<br><br>
+
 ### 8.9 정리
+- 리액트에서 Hooks 패턴을 사용하면 클래스형 컴포넌트를 작성하지 않고도 대부분의 기능을 구현할 수 있다.
+
 
 ## 9장 컴포넌트 스타일링
 ## 10장 일정 관리 웹 애플리케이션 만들기
