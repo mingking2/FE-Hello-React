@@ -10,6 +10,7 @@ const useLocalStorage = (key, initialValue) => {
 
   const setValue = useCallback((value) => {
       setStoredValue(value);
+      console.log(value);
       reactLocalStorage.setObject(key, JSON.stringify(value));
   }, []);
   

@@ -11,7 +11,7 @@ const App = () => {
 
   const handleAddMemo = () => {
     if (memo.trim() !== '') {
-      setMemos([...memos, { id: Date.now(), text: memo }]);
+      setMemos([...memos, { id: Date.now(), text: memo }]); // ES6의 확산 연산자를 사용하여 배열을 복사하고, 새로운 요소를 추가하는 방법
       setMemo('');
     }
   };
@@ -37,7 +37,7 @@ const App = () => {
       <ul>
         {memos.map((m) => (
           <li key={m.id}>
-            {m.text}
+            {m.text.replace(/ /g," \u00A0")}
             <button onClick={() => handleDeleteMemo(m.id)}>
               <FaTrash />
             </button>
