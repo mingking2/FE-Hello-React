@@ -1,8 +1,9 @@
 
 import { useState } from 'react';
 import { FaPlus, FaTrash } from 'react-icons/fa';
-import useLocalStorage from './useLocalStorage';
-import './App.css';
+import useLocalStorage from './study/week3/useLocalStorage';
+import './study/week3/App.css';
+
 
 const App = () => {
   const [memo, setMemo] = useState('');
@@ -10,13 +11,13 @@ const App = () => {
 
   const handleAddMemo = () => {
     if (memo.trim() !== '') {
-      setMemos((prevMemos) => [...prevMemos, { id: Date.now(), text: memo }]);
+      setMemos([...memos, { id: Date.now(), text: memo }]);
       setMemo('');
     }
   };
 
   const handleDeleteMemo = (memoId) => {
-    setMemos((prevMemos) => prevMemos.filter((m) => m.id !== memoId));
+    setMemos(memos.filter((m) => m.id !== memoId));
   };
 
   return (
