@@ -1,60 +1,67 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import TodoTemplate from "./components/TodoTemplate";
 import TodoInsert from "./components/TodoInsert";
 import TodoList from "./components/TodoList";
+import db from "./firebase";
+import { async } from "q";
+import { addDoc, collection, getDocs, deleteDoc, updateDoc, doc, setDoc } from "firebase/firestore/lite";
 
 const App = () => {
-  const [ todos, setTodos ] = useState([
-    {
-      id: 1,
-      text: '리액트의 기초 알아보기',
-      checked: true,
-    },
-    {
-      id: 2,
-      text: '컴포넌트 스타일링해 보기',
-      checked: true,
-    },
-    {
-      id: 3,
-      text: '일정 관리 앱 만들어 보기',
-      checked: false,
-    },
-  ]);
+  const [ todos, setTodos ] = useState([]);
+  const nextIdRef = useRef(0);
 
-  // 고윳값으로 사용될 id
-  // ref를 사용하여 변수 담기
-  const nextId = useRef(4);
+  // Firebase에서 데이터 불러오기
+  const loadTodos = async() => {
+    const querySnapshot = await getDocs(collection(db, 'todos'));
+    const todosData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    setTodos(todosData);
+ };
+
+ useEffect(() => {
+  loadTodos();
+ }, []);
 
   const onInsert = useCallback(
-    text => {
+    async text => {
+      const nextId = nextIdRef.current;
+      nextIdRef.current += 1; // nextId 1씩 더하기
       const todo = {
-        id: nextId.current,
+        id: nextId,
         text,
         checked: false,
       };
-      setTodos(todos.concat(todo));
-      nextId.current += 1; // nextId 1씩 더하기
+      await setDoc(doc(db, 'todos', nextId.toString()), todo);
+      setTodos(prevTodos => [...prevTodos, todo]);
+      //const newDocRef = await addDoc(collection(db, 'todos'), todo);
+      //setTodos(prevTodos => [...prevTodos, { id: newDocRef.id, ...todo}]);
+      
     },
-    [todos],
+    [],
   );
 
   const onRemove = useCallback(
-    id => {
-      setTodos(todos.filter(todo => todo.id !== id));
+    async id => {
+      await deleteDoc(doc(db, 'todos', id.toString()));
+      setTodos(prevTodos => prevTodos.filter(todo => todo.id !== id));
     },
-    [todos],
+    [],
   );
 
   const onToggle = useCallback(
-    id => {
-      setTodos(
-        todos.map(todo =>
-          todo.id === id ? { ...todo, checked: !todo.checked }  : todo,
-        ),
+    async id => {
+      const todoRef = doc(db, 'todos', id.toString());
+      const querySnapshot = await getDocs(todoRef);
+      const todoData = querySnapshot.data();
+      await updateDoc(todoRef, {
+        checked: !todoData.checked,
+      });
+      setTodos(prevTodos =>
+        prevTodos.map(todo =>
+          todo.id === id ? { ...todo, checked: !todo.checked } : todo
+        )
       );
     },
-    [todos],
+    []
   );
 
   return (
