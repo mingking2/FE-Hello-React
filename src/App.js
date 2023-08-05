@@ -14,6 +14,16 @@ const App = () => {
   const loadTodos = async() => {
     const querySnapshot = await getDocs(collection(db, 'todos'));
     const todosData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+    if(todosData.length > 0) {
+      // 데이터가 있을 경우 마지막 데이터의 id 값을 가져와서 nextIdRef로 설정
+      const lastTodo = todosData[todosData.length - 1];
+      nextIdRef.current = lastTodo.id + 1;
+    } else {
+      // 데이터가 없을 경우 nextId 초기화 
+      nextIdRef.current = 0;
+    }
+
     setTodos(todosData);
  };
 
