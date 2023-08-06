@@ -19,6 +19,7 @@ const App = () => {
           id: key,
           ...todosData[key]
         }));
+        // console.log(todosArray);
         setTodos(todosArray);
       }
     } catch (error) {
@@ -32,7 +33,7 @@ const App = () => {
 
   const onInsert = useCallback(
     async text => {
-      const newId = new Date();
+      const newId = Date.now();
       const todo = {
         id: newId,
         text,
@@ -41,7 +42,7 @@ const App = () => {
       try {
         await axios.put(`https://sangjeong-9bfd9-default-rtdb.firebaseio.com/todos/${todo.id}.json`, todo);
         loadTodos();
-        console.log(todo.id);
+       // console.log(todo.id);
       } catch (error) {
         console.error('데이터 추가 에러:', error);
       }
