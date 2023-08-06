@@ -2,12 +2,12 @@ import { initializeApp } from 'firebase/app'
 import { getFirestore } from 'firebase/firestore/lite'
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDNvJHTU1fV45IH5TROvRBESQhJOpxAjeE",
-  authDomain: "sangjeong-9bfd9.firebaseapp.com",
-  projectId: "sangjeong-9bfd9",
-  storageBucket: "sangjeong-9bfd9.appspot.com",
-  messagingSenderId: "900482971677",
-  appId: "1:900482971677:web:35a69680e7dc6161caaef4"
+  apiKey: process.env.REACT_APP_APIKEY,
+  authDomain: process.env.REACT_APP_AUTHDOMAIN,
+  projectId: process.env.REACT_APP_PROJECTID,
+  storageBucket: process.env.REACT_APP_STORAGEBUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGINGSENDERID,
+  appId: process.env.REACT_APP_APPID
 };
 
 // firebaseConfig 정보로 firebase 시작
