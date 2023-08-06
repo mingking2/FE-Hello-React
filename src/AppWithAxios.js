@@ -32,13 +32,16 @@ const App = () => {
 
   const onInsert = useCallback(
     async text => {
+      const newId = new Date();
       const todo = {
+        id: newId,
         text,
         checked: false,
       };
       try {
-        await axios.post('https://sangjeong-9bfd9-default-rtdb.firebaseio.com/todos.json', todo);
+        await axios.put(`https://sangjeong-9bfd9-default-rtdb.firebaseio.com/todos/${todo.id}.json`, todo);
         loadTodos();
+        console.log(todo.id);
       } catch (error) {
         console.error('데이터 추가 에러:', error);
       }
