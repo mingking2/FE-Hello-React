@@ -1,14 +1,25 @@
 import { useState, useRef, useCallback, useEffect } from "react";
-import TodoTemplate from "./components/TodoTemplate";
-import TodoInsert from "./components/TodoInsert";
-import TodoList from "./components/TodoList";
-import db from "./firebase";
-import { async } from "q";
-import { addDoc, collection, getDocs, deleteDoc, updateDoc, doc, setDoc } from "firebase/firestore/lite";
+import TodoTemplate from "./study/week4/components/TodoTemplate";
+import TodoInsert from "./study/week4/components/TodoInsert";
+import TodoList from "./study/week4/components/TodoList";
+import db from "./study/week4/firebase"
+import { collection, getDocs, deleteDoc, updateDoc, doc, setDoc } from "firebase/firestore/lite";
+
+const createBulkTodos = () => {
+  const array = [];
+  for (let i=0;i<=2500;i++) {
+    array.push({
+      id: i,
+      text: `할 일ㄹ ${i}`,
+      checked: false,
+    });
+  }
+  return array;
+};
 
 const App = () => {
-  const [ todos, setTodos ] = useState([]);
-  const nextIdRef = useRef(0);
+  const [ todos, setTodos ] = useState(createBulkTodos);
+  const nextIdRef = useRef(2501);
 
   // Firebase에서 데이터 불러오기
   const loadTodos = async() => {

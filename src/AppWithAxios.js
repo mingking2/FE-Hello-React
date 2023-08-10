@@ -1,8 +1,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
-import TodoTemplate from "./components/TodoTemplate";
-import TodoInsert from "./components/TodoInsert";
-import TodoList from "./components/TodoList";
-import { async } from "q";
+import TodoTemplate from "./study/week4/components/TodoTemplate";
+import TodoInsert from "./study/week4/components/TodoInsert";
+import TodoList from "./study/week4/components/TodoList";
 import axios from 'axios'; // Axios 추가
 
 const App = () => {
@@ -15,11 +14,8 @@ const App = () => {
       const todosData = response.data;
 
       if (todosData) {
-        const todosArray = Object.keys(todosData).map(key => ({
-          id: key,
-          ...todosData[key]
-        }));
-        // console.log(todosArray);
+        const todosArray = Object.values(todosData);
+        console.log(todosArray);
         setTodos(todosArray);
       }
     } catch (error) {
